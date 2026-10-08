@@ -1,10 +1,420 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Phi-She | Red Team Portfolio</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Security Operations & Engineering | Portfolio</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-primary: #0a0d14;
+      --bg-surface: #111622;
+      --bg-surface-elevated: #161d2e;
+      --border-subtle: #1e293b;
+      --border-focus: #10b981;
+      
+      --text-main: #f1f5f9;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+      
+      --accent-cyan: #06b6d4;
+      --accent-emerald: #10b981;
+      --accent-amber: #f59e0b;
+      --accent-emerald-glow: rgba(16, 185, 129, 0.15);
+      
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: 'Fira Code', monospace;
+      --radius-sm: 6px;
+      --radius-md: 10px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-primary);
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      background-image: 
+        radial-gradient(circle at 50% 0%, rgba(16, 185, 129, 0.05) 0%, transparent 50%),
+        linear-gradient(to right, rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+      background-size: 100% 100%, 40px 40px, 40px 40px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Container */
+    .container {
+      max-width: 1040px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+      width: 100%;
+    }
+
+    /* Header / Nav */
+    header {
+      border-bottom: 1px solid var(--border-subtle);
+      background: rgba(10, 13, 20, 0.85);
+      backdrop-filter: blur(12px);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    .nav-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 64px;
+    }
+
+    .terminal-brand {
+      font-family: var(--font-mono);
+      font-size: 0.95rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--accent-emerald);
+      text-decoration: none;
+    }
+
+    .pulse-dot {
+      width: 8px;
+      height: 8px;
+      background-color: var(--accent-emerald);
+      border-radius: 50%;
+      box-shadow: 0 0 10px var(--accent-emerald);
+      animation: pulse 2s infinite ease-in-out;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.85); }
+    }
+
+    nav a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-family: var(--font-mono);
+      margin-left: 1.5rem;
+      transition: color 0.2s;
+    }
+
+    nav a:hover {
+      color: var(--text-main);
+    }
+
+    /* Section Styling */
+    main {
+      flex: 1;
+      padding: 3.5rem 0 5rem;
+    }
+
+    .section-header {
+      margin-bottom: 2rem;
+    }
+
+    .section-tag {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--accent-cyan);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 0.5rem;
+    }
+
+    .section-title {
+      font-size: 1.75rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--text-main);
+    }
+
+    .section-desc {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      max-width: 600px;
+      margin-top: 0.4rem;
+    }
+
+    /* Projects Grid */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+      gap: 1.5rem;
+    }
+
+    /* Project Card */
+    .project-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+      overflow: hidden;
+    }
+
+    .project-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--border-subtle), transparent);
+      transition: background 0.3s;
+    }
+
+    .project-card:hover {
+      transform: translateY(-3px);
+      border-color: rgba(16, 185, 129, 0.4);
+      box-shadow: 0 12px 28px -10px var(--accent-emerald-glow);
+    }
+
+    .project-card:hover::before {
+      background: linear-gradient(90deg, transparent, var(--accent-emerald), transparent);
+    }
+
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .card-category {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--accent-emerald);
+      background: rgba(16, 185, 129, 0.08);
+      border: 1px solid rgba(16, 185, 129, 0.2);
+      padding: 2px 8px;
+      border-radius: var(--radius-sm);
+    }
+
+    .status-badge {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--text-dim);
+    }
+
+    .project-name {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--text-main);
+      margin-bottom: 0.5rem;
+      letter-spacing: -0.01em;
+    }
+
+    .project-summary {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      line-height: 1.5;
+      margin-bottom: 1.5rem;
+    }
+
+    /* Tech Stack Tags */
+    .stack-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .tag {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      background: var(--bg-surface-elevated);
+      padding: 2px 8px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-subtle);
+    }
+
+    /* Links */
+    .project-links {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      padding-top: 1rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    .btn-link {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      color: var(--text-main);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: color 0.15s;
+    }
+
+    .btn-link:hover {
+      color: var(--accent-emerald);
+    }
+
+    .btn-link svg {
+      width: 14px;
+      height: 14px;
+      stroke-width: 2;
+    }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--border-subtle);
+      padding: 1.5rem 0;
+      text-align: center;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--text-dim);
+    }
+  </style>
 </head>
 <body>
-    <h1>Welcome to my Cybersecurity Portfolio</h1>
-    <p>Site coming soon...</p>
+
+  <!-- Top Navigation -->
+  <header>
+    <div class="container nav-inner">
+      <a href="#" class="terminal-brand">
+        <span class="pulse-dot"></span>
+        secops@local:~$
+      </a>
+      <nav>
+        <a href="#projects">~/projects</a>
+        <a href="#about">~/about</a>
+        <a href="#contact">~/contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- Projects Section -->
+    <section id="projects">
+      <div class="section-header">
+        <span class="section-tag">[01] repository_index</span>
+        <h2 class="section-title">Security & Engineering Projects</h2>
+        <p class="section-desc">
+          Defensive engineering implementations, incident detection pipelines, network defense architectures, and red team testbeds.
+        </p>
+      </div>
+
+      <div class="projects-grid">
+        <!-- Project 1 -->
+        <article class="project-card">
+          <div>
+            <div class="card-top">
+              <span class="card-category">Detection & Response</span>
+              <span class="status-badge">DEPLOYED</span>
+            </div>
+            <h3 class="project-name">Automated Telemetry Health & Policy Auditor</h3>
+            <p class="project-summary">
+              Automated audit pipeline tracking endpoint sensor heartbeat compliance, RFM fallbacks, and behavioral alert drift across hybrid workstations.
+            </p>
+          </div>
+          <div>
+            <div class="stack-tags">
+              <span class="tag">Python</span>
+              <span class="tag">EDR APIs</span>
+              <span class="tag">SIEM Webhooks</span>
+              <span class="tag">Docker</span>
+            </div>
+            <div class="project-links">
+              <a href="#" class="btn-link">
+                View Architecture 
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </a>
+              <a href="#" class="btn-link">GitHub</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Project 2 -->
+        <article class="project-card">
+          <div>
+            <div class="card-top">
+              <span class="card-category">Network Defense</span>
+              <span class="status-badge">PRODUCTION</span>
+            </div>
+            <h3 class="project-name">Zero-Trust VLAN & ACL Hardening Matrix</h3>
+            <p class="project-summary">
+              Segmented multi-tier enterprise network lab implementing strict inter-VLAN ACLs, 802.1Q trunk verification, and rogue DHCP/ARP spoofing mitigations.
+            </p>
+          </div>
+          <div>
+            <div class="stack-tags">
+              <span class="tag">Cisco IOS</span>
+              <span class="tag">Wireshark</span>
+              <span class="tag">VLAN / 802.1Q</span>
+              <span class="tag">DHCP Snooping</span>
+            </div>
+            <div class="project-links">
+              <a href="#" class="btn-link">
+                Read Spec
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Project 3 -->
+        <article class="project-card">
+          <div>
+            <div class="card-top">
+              <span class="card-category">Vulnerability Mgmt</span>
+              <span class="status-badge">DOCUMENTATION</span>
+            </div>
+            <h3 class="project-name">Active Recon & Privilege Escalation Labs</h3>
+            <p class="project-summary">
+              Comprehensive attack surface write-ups covering SMB null-session enumeration, NoSQL/MongoDB credential extraction, and Linux SUID privilege abuse chains.
+            </p>
+          </div>
+          <div>
+            <div class="stack-tags">
+              <span class="tag">Nmap</span>
+              <span class="tag">Gobuster</span>
+              <span class="tag">SMBClient</span>
+              <span class="tag">Linux PrivEsc</span>
+            </div>
+            <div class="project-links">
+              <a href="#" class="btn-link">
+                View Writeups
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </a>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      SEC_SYS_STATUS: OPTIMAL &bull; 2026
+    </div>
+  </footer>
+
 </body>
 </html>
